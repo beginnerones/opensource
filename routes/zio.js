@@ -2,8 +2,9 @@ const express=require('express');  //open.js같이
 const http=require('http');
 const https=require('https');
 const xmls=require('xml2js');
+const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
 const router=express.Router();
-
+dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 let ziourl='https://api.vworld.kr/req/address';
 
 router.get('/',(req,res)=>{
