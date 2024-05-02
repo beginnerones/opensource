@@ -14,6 +14,11 @@ jobs:
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Set up .env file
+        run: |
+          echo KEY=${{ secrets.KEY }} >> .env
+          echo ZIO=${{ secrets.ZIO }} >> .env
+          echo KEYS=${{ secrets.KEYS }} >> .env
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
