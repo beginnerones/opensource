@@ -3,6 +3,7 @@ const express=require('express');
 const http=require('http'); //http 요청 보내기 위한 모듈입니다.
 const xmls=require('xml2js'); //xml파일을 json으로 변형하기 위한 모듈입니다.
 const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
+const request = require('request');
 const router=express.Router();
 dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 
@@ -23,23 +24,17 @@ router.get('/',(req,res,next)=>{ //기본 경로로 호출시 get 요청을 수�
 
     var alurl=aparturl+apartParams; //URL과 매개변수들을 합쳐줍니다.
 
-    http.get(alurl,(apiRes)=>{ //API에 대한 GET요청을 보내줍니다.
-        let data=''; //api응답으로 받아오는 정보를 수집하기 위해 존재.
-        apiRes.on('data',(chunk)=>{ //이벤트 리스너를 등록해 새데이터 도착시마다 data변수에 추가해줍니다.
-            data+=chunk;
-        });
-        apiRes.on('end',()=>{ //여기도 이벤트 리스너로서 도착할 데이터 없을시 호출됩니다.
-            //data+='>';
-            xmls.parseString(data,{ explicitArray: false },(err,result)=>{ //그러나 이곳에서 API호출 결과로 XML이 오기에 JSON형태로 변환해줍니다.
-                if(err){ //만약 에러가 있을시에는 에러 처리 미들웨어로 이동합니다.
-                    next(err);
-                }else{// 그러나 에러가 없다면 정상코드와 결과를 반환해줍니다.
-                    res.status(200).send(result);
-                }
-            });
-        });
-     }).on('error',(e)=>{ //http get에서 일어나는 오류를 잡습니다.
-         next(e);
+    request.get(alurl,(err,apiRes,body)=>{
+        if(err){
+            next(err);
+        }
+        xmls.parseString(body, { explicitArray: false }, (err, result) => {
+            if (err) {
+                return next(err);
+            }
+            res.status(200).send(result);
+        }); 
+
     });
 });
 

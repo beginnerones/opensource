@@ -9,7 +9,7 @@ dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 
 app.locals.properties = []; //임시적으로 담기위한 변수 선언.(db가 없는 관계로.)
 
-const apjs=require('./routes/aprtapi');  //아파트 매매에 대한 정보를 가져오는 라우터
+const apjs=require('./routes/apartapi');  //아파트 매매에 대한 정보를 가져오는 라우터
 const search=require('./routes/serach'); //지역에 법정동코드를 검색하기 위한 라우터
 const zio=require('./routes/zio');  //특정 지역을 검색하여 그 지역에 대한 x,y좌표를 구할수 있는 라우터.
 

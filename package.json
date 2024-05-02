@@ -4,7 +4,7 @@
   "description": "openapi with project",
   "main": "open.js",
   "scripts": {
-    "start":"nodemon app",
+    "start": "nodemon app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "hhs",
