@@ -10,7 +10,7 @@ let ziourl='https://api.vworld.kr/req/address';
 router.get('/',(req,res)=>{
     let type=encodeURIComponent(req.query.type||'PARCEL');
     let adr=encodeURIComponent(req.query.address||'판교');
-    let zioParams='?'+encodeURIComponent('key')+'='+B92C678C-A8A1-3616-B2CD-CD8E8C1F38D4;
+    let zioParams='?'+encodeURIComponent('key')+'='+process.env.ZIO;
     zioParams+= '&' + encodeURIComponent('service')+'='+encodeURIComponent('address');
     zioParams+= '&' + encodeURIComponent('request')+'='+encodeURIComponent('GetCoord');
     zioParams+= '&' + encodeURIComponent('format')+'='+encodeURIComponent('json');
