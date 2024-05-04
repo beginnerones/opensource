@@ -29,7 +29,7 @@ router.get('/',(req,res)=>{
         apiRes.on('end',()=>{
             try{ //데이터를 받아오는게 끝나면 실행
                 const result=JSON.parse(data); //받아온 데이터를 json객체로 반환.
-                res.status(200).send(result);  //정상호출 되었음을 알리는 200번대 번호와 json결과를 반환해줍니다. 
+                res.status(200).send(JSON.stringify(result));  //정상호출 되었음을 알리는 200번대 번호와 json결과를 반환해줍니다. 
             }catch(error){ //만약 위에서 오류가 있었다면
                 res.status(500).send({error:'응답오류'}); //여기서 500과 함께 응답오류를 보냅니다.
             }

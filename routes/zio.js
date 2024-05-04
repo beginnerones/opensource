@@ -2,6 +2,7 @@ const express=require('express');  //이곳에서 익스프레스를 사용하�
 const http=require('http'); //http모듈을 불러와줍니다.
 const https=require('https'); //api의 주소가 https이므로 https모듈도 불러와줍니다.
 const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
+const Zio=require('../models/zio');
 const router=express.Router();  //이곳에서도 다른 라우터들과 마찬가지로 라우터 인스턴스를 생성해줍니다.
 dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 let ziourl='https://api.vworld.kr/req/address'; //호출할 api주소입니다.
@@ -52,19 +53,18 @@ router.post('/select',(req,res)=>{ //원하는 지역에 x,y좌표를 저장.
         apiRes.on('data',(chunk)=>{ //이벤트 리스너를 등록해 새데이터 도착시마다 data변수에 추가해줍니다.
             data+=chunk;
         });
-        apiRes.on('end',()=>{ //여기도 이벤트 리스너로서 도착할 데이터 없을시 호출됩니다.
+        apiRes.on('end',async()=>{ //여기도 이벤트 리스너로서 도착할 데이터 없을시 호출됩니다.
             try{
                 const result=JSON.parse(data); //json방식으로 변경하여 객체로 생성해줍니다.
                 console.log(result);
-                const locationData={
+                const newZio= await Zio.create({
                     x:result.response.result.point.x,
                     y:result.response.result.point.y,
-                    location:result.response.refined.text
-                };
-                req.app.locals.location.push(locationData);
-                console.log(req.app.locals.location);
-                res.status(200).send({message:"저장이 완료되었습니다.",x:locationData.x
-                ,y:locationData.y,location:locationData.location});   //이후 변형된 객체를 정상작동인 200코드와 결과를 보내줍니다.
+                    location:result.response.refined.text,
+                });
+                
+                console.log(newZio);
+                res.status(200).send({message:"저장이 완료되었습니다.",newZio});   //이후 변형된 객체를 정상작동인 200코드와 결과를 보내줍니다.
             }
             catch(error){
                 console.log(error);

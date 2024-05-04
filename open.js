@@ -3,13 +3,21 @@ const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
 const http=require('http'); //HTTP 서버 기능 사용 위한 모듈
 const xmls=require('xml2js'); 
 const logger = require('./logger');
+const {sequelize} = require('./models');
+const Apart=require('./models/apart');
+const Zio=require('./models/zio');
 
 const app=express(); //Express 앱 생성.
 const router=express.Router(); //라우터 기능으로 코드를 직관적으로 볼수있게 나눈다.
 dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 
-app.locals.properties = []; //임시적으로 담기위한 변수 선언.(db가 없는 관계로.)
-app.locals.location=[]; //지오코딩 api 결과 x,y좌표를 담기 위해 준비하였습니다.
+sequelize.sync({force:false})
+    .then(()=>{
+        console.log('데이터베이스 연결 성공');
+    })
+    .catch((err)=>{
+        console.error(err);
+    });
 
 const apjs=require('./routes/apartapi');  //아파트 매매에 대한 정보를 가져오는 라우터
 const eventjs=require('./routes/eventapi');

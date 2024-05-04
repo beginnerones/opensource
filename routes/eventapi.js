@@ -4,6 +4,7 @@ const http=require('http'); //http 요청 보내기 위한 모듈입니다.
 const xmls=require('xml2js'); //xml파일을 json으로 변형하기 위한 모듈입니다.
 const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
 const router=express.Router();
+const Zio=require('../models/zio');
 dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 
 router.use(express.json()); //JSON형태로 요청의 BODY를 파싱하기 위해 express의 미들웨어를 사용합니다.
@@ -13,23 +14,31 @@ let deal_ymdin='';
 var evurl = 'http://apis.data.go.kr/B551011/KorService1/locationBasedList1';  //아파트 관련 API
 
 
-router.get('/',(req,res,next)=>{ //기본 경로로 호출시 get 요청을 수행합니다.
+router.get('/',async(req,res,next)=>{ //기본 경로로 호출시 get 요청을 수행합니다.
     smart=req.query.MobileOS;
     selindex=parseInt(req.query.selindex,10);
     radius=req.query.radius||'1000';
     console.log(selindex);
+    const zioList=await Zio.findOne({
+        attributes:['x','y'],
+        where:{
+            id:selindex,
+        },
+    });
+    
 
-    const select=req.app.locals.location[selindex];
-    if(!select){
+    if(!zioList){
         console.log(req.app.locals.location);
         return res.status(400).send({error:'잘못된 인덱스'});
     }
+    const x=zioList.dataValues.x;
+    const y=zioList.dataValues.y;
     let querys='?'+encodeURIComponent('serviceKey')+'='+process.env.KEY;
     querys+='&' + encodeURIComponent('MobileOS')+'='+encodeURIComponent(smart);
     querys+='&' + encodeURIComponent('MobileApp')+'='+encodeURIComponent('openapi');
     querys+='&' + encodeURIComponent('_type')+'='+encodeURIComponent('json');
-    querys+='&' + encodeURIComponent('mapX')+'='+encodeURIComponent(select.x);
-    querys+='&' + encodeURIComponent('mapY')+'='+encodeURIComponent(select.y);
+    querys+='&' + encodeURIComponent('mapX')+'='+encodeURIComponent(x);
+    querys+='&' + encodeURIComponent('mapY')+'='+encodeURIComponent(y);
     querys+='&' + encodeURIComponent('radius')+'='+encodeURIComponent(radius);
 
     const eventurl=evurl+querys;
