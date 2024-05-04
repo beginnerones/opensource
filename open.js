@@ -2,6 +2,7 @@ const express= require('express'); //Express 프레임워크를 불러온다.
 const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
 const http=require('http'); //HTTP 서버 기능 사용 위한 모듈
 const xmls=require('xml2js'); 
+const logger = require('./logger');
 
 const app=express(); //Express 앱 생성.
 const router=express.Router(); //라우터 기능으로 코드를 직관적으로 볼수있게 나눈다.
@@ -29,6 +30,8 @@ app.use('/api/zio',zio);
 app.use((req,res,next)=>{
     const error= new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
     error.status=404;
+    logger.info("hello");
+    logger.error(error.message);
     next(error);
 })
 //모든에러를 처리해주기 위한 미들웨어로서 서버간 전달된 에러를 처리해줍니다.
