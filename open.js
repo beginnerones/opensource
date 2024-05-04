@@ -26,6 +26,15 @@ app.use('/api/event',eventjs);
 app.use('/api/search',search);
 app.use('/api/zio',zio);
 
+app.get('/',(res,req)=>{
+    res.status(200).send({message:"아파트 매매값 조회및 주변행사 조회 api에 오신것을 환영합니다."});
+});
+
+app.get('/favicon.ico',(res,req)=>{
+    res.status(204).end();
+});
+    
+
 //라우터를 검색했는데 없을시 여기서 404 에러로 처리해줍니다.
 app.use((req,res,next)=>{
     const error= new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
