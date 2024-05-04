@@ -26,11 +26,11 @@ app.use('/api/event',eventjs);
 app.use('/api/search',search);
 app.use('/api/zio',zio);
 
-app.get('/',(res,req)=>{
+app.get('/',(req,res)=>{
     res.status(200).send({message:"아파트 매매값 조회및 주변행사 조회 api에 오신것을 환영합니다."});
 });
 
-app.get('/favicon.ico',(res,req)=>{
+app.get('/favicon.ico',(req,res)=>{
     res.status(204).end();
 });
     
