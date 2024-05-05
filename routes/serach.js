@@ -1,5 +1,5 @@
 const express=require('express');
-const http=require('http');
+const http=require('http'); //api호출을 위해서 사용합니다.
 
 const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
 const router=express.Router(); //익스프레스에서 라우터 인스턴스를 생성합니다.
@@ -9,7 +9,7 @@ let pageinr=''; //지역을 검색할때 사용하려는 변수입니다.
 
 let regin='http://apis.data.go.kr/1741000/StanReginCd/getStanReginCdList';
 
-
+//지역을 입력하여 모르는 법정동 코드를 조회하여 줍니다.
 router.get('/',(req,res)=>{
     pageinr=encodeURIComponent(req.query.locatadd_nm || '서울특별시'); //여기서 매개변수값을 입력받아서  아래에 처리해줍니다.
 
@@ -29,7 +29,7 @@ router.get('/',(req,res)=>{
         apiRes.on('end',()=>{
             try{ //데이터를 받아오는게 끝나면 실행
                 const result=JSON.parse(data); //받아온 데이터를 json객체로 반환.
-                res.status(200).send(JSON.stringify(result));  //정상호출 되었음을 알리는 200번대 번호와 json결과를 반환해줍니다. 
+                res.status(200).send(result);  //정상호출 되었음을 알리는 200번대 번호와 json결과를 반환해줍니다. 
             }catch(error){ //만약 위에서 오류가 있었다면
                 res.status(500).send({error:'응답오류'}); //여기서 500과 함께 응답오류를 보냅니다.
             }
