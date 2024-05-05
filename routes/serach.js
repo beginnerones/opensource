@@ -35,6 +35,8 @@ router.get('/',(req,res)=>{
             }
              
         });
+    }).on('error',(err)=>{
+        next(err);
     });
 });
 

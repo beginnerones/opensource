@@ -8,7 +8,7 @@ dotenv.config(); //.env 파일을 process.env로 불러올수있게 합니다.
 let ziourl='https://api.vworld.kr/req/address'; //호출할 api주소입니다.
 let zioParams='';
 
-router.get('/',(req,res)=>{ //이 라우터에 루트경로로 호출시 GET 요청을 처리해줍니다.
+router.get('/',(req,res,next)=>{ //이 라우터에 루트경로로 호출시 GET 요청을 처리해줍니다.
     let type=encodeURIComponent(req.query.type||'PARCEL'); // 도로명주소로 작성할지 지번주소로 작성할지 선택합니다.
     let adr=encodeURIComponent(req.query.address||'판교'); //정보를 알고싶은 지역에 대해서 작성합니다.
     zioParams='?'+encodeURIComponent('key')+'='+process.env.ZIO; //인증키를 의미합니다.
@@ -34,10 +34,12 @@ router.get('/',(req,res)=>{ //이 라우터에 루트경로로 호출시 GET 요
             }
              
         });
+    }).on('error',(err)=>{
+        next(err);
     });
 });
 
-router.post('/select',(req,res)=>{ //원하는 지역에 x,y좌표를 저장.
+router.post('/select',(req,res,next)=>{ //원하는 지역에 x,y좌표를 저장.
     const {type,address}=req.body;
     zioParams='?'+encodeURIComponent('key')+'='+process.env.ZIO; //인증키를 의미합니다.
     zioParams+= '&' + encodeURIComponent('request')+'='+encodeURIComponent('GetCoord'); //요청 서비스 오퍼레이션 입니다.
@@ -72,7 +74,22 @@ router.post('/select',(req,res)=>{ //원하는 지역에 x,y좌표를 저장.
             }
              
         });
+    }).on('error',(err)=>{
+        next(err);
     });
+});
+
+router.delete('/delete/:id',async(req,res,next)=>{
+    try{
+        const deletelist=await Zio.destroy({
+            where:{id:req.params.id},
+        });
+        if(!deletelist) res.status(404).send({message:"삭제할 데이터가 존재하지 않습니다."});
+        res.status(202).send({message:"삭제 성공"});
+    }catch(err){
+        next(err);
+    }
+    
 });
 
 module.exports=router; //이 파일에서 정의한 라우터를 모듈로써 사용하기 위해서 존재합니다.다른파일에서 라우터로 사용이 가능해 집니다.
