@@ -79,6 +79,12 @@ router.post('/select',(req,res,next)=>{ //원하는 지역에 x,y좌표를 저�
     });
 });
 
+router.get('/list',async(req,res)=>{ //이곳은 바로위에 post로 입력한 정보들을 조회할수 있게 해주는 부분입니다.
+    const Zioall=await Zio.findAll({}); //zio db에 저장된 데이터를
+    if(!Zioall) return res.status(404).send({message:"삭제할 데이터가 존재하지 않습니다."}); //만약 ziall이 비어있을시 데이터가 존재하지 않다고 알림
+    res.status(200).send(Zioall); //저장된 지역에 x,y,지역이름을 응답해줍니다.
+});
+
 router.delete('/delete/:id',async(req,res,next)=>{
     try{
         const deletelist=await Zio.destroy({
