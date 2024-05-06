@@ -18,7 +18,7 @@ router.get('/',(req,res,next)=>{ //이 라우터에 루트경로로 호출시 GE
     }else{ //기본값
         type=encodeURIComponent('PARCEL');
     }
-    let adr=encodeURIComponent(req.query.address); //정보를 알고싶은 지역에 대해서 작성합니다.
+    let adr=encodeURIComponent(req.query.address); //정보를 알고싶은 지역에 대해서 작성합니다.(ex.지번명이면 쌍문동,도로명이면 당산로 21길 31 이런식)
     zioParams='?'+encodeURIComponent('key')+'='+process.env.ZIO; //인증키를 의미합니다.
     zioParams+= '&' + encodeURIComponent('service')+'='+encodeURIComponent('address'); //요청 서비스 명입니다.
     zioParams+= '&' + encodeURIComponent('request')+'='+encodeURIComponent('GetCoord'); //요청 서비스 오퍼레이션 입니다.
