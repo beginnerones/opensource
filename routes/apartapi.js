@@ -16,9 +16,9 @@ const aparturl = 'http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/ser
 //아파트에 대한 정보로 법정동코드,계약년도월을 작성해 매매 정보를 조회하여 줍니다.
 
 router.get('/',(req,res,next)=>{ //기본 경로로 호출시 get 요청을 수행합니다.
-    lawd_cdin=encodeURIComponent(req.query.lawd_cd);  //법정동코드를 입력하는 부분입니다.
-    deal_ymdin=encodeURIComponent(req.query.deal_ymd); //그 해당 건물에 계약년도와 월을 입력합니다.
-    simple=encodeURIComponent(req.query.simple ||'0') //해당 정보를 간단하게 볼지 아닌지를 입력합니다.
+    lawd_cdin=encodeURIComponent(req.query.lawd_cd);  //법정동코드를 입력하는 부분입니다.(ex.11110 앞에5글자만 입력하면 됩니다.)
+    deal_ymdin=encodeURIComponent(req.query.deal_ymd); //그 해당 건물에 계약년도와 월을 입력합니다. (ex.201512)
+    simple=encodeURIComponent(req.query.simple ||'0') //해당 정보를 간단하게 볼지 아닌지를 입력합니다. (1||0)
 
     let apartParams = '?' + encodeURIComponent('serviceKey') + '='+process.env.KEY;  //인증키 부분입니다.
     apartParams  += '&' + encodeURIComponent('LAWD_CD') + '=' + encodeURIComponent(lawd_cdin); //위에 값들을 api호출을 위해 매개변수에 넣어줍니다.
@@ -61,11 +61,11 @@ router.post('/select',async(req,res,next)=>{ //라우터 경로에서 /update로
     const {ApartName, location, Amount, Area, Build } =req.body; //사용자가 요청 본문에 입력한 아파트이름,지역,매매가격,평수,건설년도를 입력받습니다.
     try{
         const newApart= await Apart.create({ //이 아파트db에 작성이 완료전까지 대기합니다.
-            apart_name:ApartName,
-            buildyear:Build,
-            amount:Amount,
-            location:location,
-            area:Area ,
+            apart_name:ApartName,  //(ex.신한 아파트) //아파트이름을 의미합ㄴ디ㅏ.
+            buildyear:Build,    //(ex.201512) //건설년도,월을 의미합니다.
+            amount:Amount,        //(ex.200000) //매매가격입니다.
+            location:location,    //(ex.서울시 도봉구) //지역을 의미합니다.
+            area:Area ,        //(ex.46.23512~)평수를 의미합니다.
         });
         res.status(201).send({message:"저장이 완료되었습니다.",newApart}); //
     //작성됨을 알리는 201코드와 메시지들과 변수들을 전송해줍니다.
