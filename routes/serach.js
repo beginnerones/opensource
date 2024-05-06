@@ -11,7 +11,7 @@ let regin='http://apis.data.go.kr/1741000/StanReginCd/getStanReginCdList';
 
 //지역을 입력하여 모르는 법정동 코드를 조회하여 줍니다.
 router.get('/',(req,res)=>{
-    pageinr=encodeURIComponent(req.query.locatadd_nm || '서울특별시'); //여기서 매개변수값을 입력받아서  아래에 처리해줍니다.
+    pageinr=encodeURIComponent(req.query.locatadd_nm || '서울특별시'); //여기서 지역을 검새하여 줍니다.(ex. 부산,의정부,양양 등)
 
     let reParms='?'+encodeURIComponent('serviceKey')+'='+process.env.KEY; //인증키를 전송.
     reParms+= '&' + encodeURIComponent('locatadd_nm')+'='+pageinr; //이곳에서 처리.
