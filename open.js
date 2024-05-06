@@ -1,11 +1,11 @@
 const express= require('express'); //Express 프레임워크를 불러온다.
 const dotenv=require('dotenv'); //.env를 읽기 위해 사용한다.
 const http=require('http'); //HTTP 서버 기능 사용 위한 모듈
-const xmls=require('xml2js'); 
-const logger = require('./logger');
-const {sequelize} = require('./models');
-const Apart=require('./models/apart');
-const Zio=require('./models/zio');
+const xmls=require('xml2js'); //xnl파일을 json으로 바꾸기위해 사용하는 모듈입니다.
+const logger = require('./logger');  //서버로 배포시 에러로그를 남겨주는 라이브러리입니다.
+const {sequelize} = require('./models');//데이터베이스를 연결하기 위해 사용하는 라이브러리 입니다
+const Apart=require('./models/apart');//아파트 데이터베이스와 연결된 아파트 모듈입니다.
+const Zio=require('./models/zio');//zio 데이터베이스와 연결된 zio 모듈입니다.
 
 const app=express(); //Express 앱 생성.
 const router=express.Router(); //라우터 기능으로 코드를 직관적으로 볼수있게 나눈다.
