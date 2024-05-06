@@ -13,10 +13,10 @@ let deal_ymdin='';
 //호출할 api의 url입니다.
 const evurl = 'http://apis.data.go.kr/B551011/KorService1/locationBasedList1';  //아파트 관련 API
 
-//기본경로로 들어갈시 그 지역에 행사를 조회하여 줍니다.
+//기본경로로 들어갈시 이전에 저장했던 zio테이블에 저장된 내용을 기준으로 그 지역에 행사를 조회하여 줍니다.
 router.get('/',async(req,res,next)=>{ //기본 경로로 호출시 get 요청을 수행합니다.
     smart=req.query.MobileOS||'ETC'; //핸드폰에 os를 입력하여 줍니다,기본적인 값을 작성하였습니다.(IOS,AND.WIN,ETC).
-    selindex=parseInt(req.query.selindex,10);  //이곳은 ZIO 데이터베이스에 ID 인덱스 번호를 입력하여 여기에 저장된 X,Y좌표 주변에 행사를 조회합니다.
+    selindex=parseInt(req.query.selindex,10);  //이곳은 ZIO 데이터베이스에 ID 인덱스 번호를 입력하여 여기에 저장된 X,Y좌표 주변에 행사를 조회합니다.1부터 시작합니다.
     radius=req.query.radius||'1000'; //해당 좌표 주변으로부터 몇m로 조회할지 설정합니다.기본값이 존재합니다.
     console.log(selindex);
     const zioList=await Zio.findOne({  //데이터베이스에서 정보를 불러옵니다.
